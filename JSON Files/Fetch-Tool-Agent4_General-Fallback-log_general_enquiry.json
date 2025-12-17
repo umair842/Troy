@@ -1,0 +1,220 @@
+{
+  "name": "Fetch-Tool-Agent4_General-Fallback-log_general_enquiry",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "8a9aabf8-dca9-4141-8177-305dbb77b41e",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -304,
+        -64
+      ],
+      "id": "db556c39-5e93-450b-a51f-8bfdefc63e6a",
+      "name": "Webhook-Receive General Enquiry Data",
+      "webhookId": "8a9aabf8-dca9-4141-8177-305dbb77b41e"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fe3e1217-1301-4966-a5ab-3982b93e3313",
+              "name": "Transcription",
+              "value": "={{ $json.body.call.transcript }}",
+              "type": "string"
+            },
+            {
+              "id": "b42cc240-d56b-489e-af4a-aee95e9ffaa2",
+              "name": "Call-ID",
+              "value": "={{ $json.body.call.call_id }}",
+              "type": "string"
+            },
+            {
+              "id": "1cf1a5d6-b38d-43f0-b400-9b3b747607f8",
+              "name": "caller_email",
+              "value": "={{ $json.body.args.caller_email }}",
+              "type": "string"
+            },
+            {
+              "id": "9376fdc4-04a1-4067-a618-327efd3bdda7",
+              "name": "caller_name",
+              "value": "={{ $json.body.args.caller_name }}",
+              "type": "string"
+            },
+            {
+              "id": "71a2e637-3a61-4a3b-9e54-d91ca5604eeb",
+              "name": "caller_phone",
+              "value": "={{ $json.body.args.caller_phone }}",
+              "type": "string"
+            },
+            {
+              "id": "1c9ddbb5-0c5a-4675-a56b-7ade2e225482",
+              "name": "enquiry_summary",
+              "value": "={{ $json.body.args.enquiry_summary }}",
+              "type": "string"
+            },
+            {
+              "id": "a974f3a8-80b7-4bcf-98f8-574dca7beda0",
+              "name": "tool_call_ID",
+              "value": "={{ $json.body.call.transcript_with_tool_calls[2].tool_call_id }}",
+              "type": "string"
+            },
+            {
+              "id": "c94ffbf8-b7a9-4aa4-9931-2882382031fc",
+              "name": "CallTime",
+              "value": "={{ DateTime.local().setZone('Australia/Melbourne').toFormat('yyyy-MM-dd HH:mm') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -96,
+        -64
+      ],
+      "id": "efc6f007-cf18-45d8-99c3-ad4726406a70",
+      "name": "General Enquiry Vars"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bb68e0e3-5f7e-4a94-89fa-07212db6b6eb",
+              "name": "GeneralEmail",
+              "value": "troy@tronic.com.au",
+              "type": "string"
+            },
+            {
+              "id": "160a5ec7-03bd-48f2-a0af-53599d5a9f08",
+              "name": "EmailSubjectGeneral",
+              "value": "General Enquiry",
+              "type": "string"
+            },
+            {
+              "id": "614ed261-a98c-4b94-aea9-b6a8733bc1ea",
+              "name": "EmailBodyGeneral",
+              "value": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>General Enquiry</title>\n  <style>\n    body { margin:0; padding:0; background:#f4f4f4; font-family:Arial,Helvetica,sans-serif; color:#111; }\n    .email-wrap { max-width:640px; margin:24px auto; background:#fff; border:1px solid #e6e6e6; border-radius:8px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,0.06); }\n    .header { background:#fff; border-bottom:1px solid #e6e6e6; padding:16px 20px; text-align:left; }\n    .header img { height:40px; width:auto; }\n    .title { font-size:20px; font-weight:700; margin:0; padding:20px; border-bottom:1px solid #f0f0f0; background:#fafafa; }\n    .section { padding:20px; }\n    .section h3 { margin:0 0 8px; font-size:14px; font-weight:700; color:#555; text-transform:uppercase; }\n    .section p { margin:0 0 16px; font-size:15px; }\n    .highlight { background:#f9f9f9; border-left:4px solid #d21e2b; padding:12px; border-radius:4px; font-style:italic; }\n    .spacer { margin-top:24px; }\n    .footer { background:#fafafa; border-top:1px solid #e6e6e6; text-align:center; padding:16px; font-size:13px; color:#666; }\n    .footer a { color:#d21e2b; text-decoration:none; font-weight:700; }\n    .transcript-block { background:#f9f9f9; border-left:4px solid #d21e2b; padding:12px; border-radius:4px; font-style:italic; }\n    .transcript-block pre { margin:0; white-space:pre-wrap; font-family:Arial,Helvetica,sans-serif; font-size:15px; }\n  </style>\n</head>\n<body>\n  <div class=\"email-wrap\">\n    <div class=\"header\">\n      <img src=\"https://lirp.cdn-website.com/d9af49c1/dms3rep/multi/opt/Fetch-Recruitment-lock-up+640x250px-261w.png\" alt=\"Fetch Recruitment\">\n    </div>\n    <h1 class=\"title\">General Enquiry</h1>\n\n    <div class=\"section\">\n      <h3>Call Start Time</h3>\n      <p>{{$json.CallTime}}</p>\n\n      <h3>Call ID</h3>\n      <p>{{$json[\"Call-ID\"]}}</p>\n\n      <h3>Caller Name</h3>\n      <p>{{$json.caller_name}}</p>\n\n      <h3>Phone</h3>\n      <p>{{$json.caller_phone}}</p>\n\n      <h3>Email</h3>\n      <p>{{$json.caller_email}}</p>\n\n      <h3>Enquiry Summary</h3>\n      <div class=\"highlight\">{{$json.enquiry_summary}}</div>\n\n      <div class=\"spacer\"></div>\n      <h3>Transcript</h3>\n      <div class=\"transcript-block\">\n        <pre>{{$json.Transcription}}</pre>\n      </div>\n    </div>\n\n    <div class=\"footer\">\n      <a href=\"https://www.fetchrecruitment.com.au/\">fetchrecruitment.com.au</a><br>\n      &copy; 2025 Fetch Recruitment\n    </div>\n  </div>\n</body>\n</html>\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        112,
+        -64
+      ],
+      "id": "1e8fab7a-1413-465b-b44c-996385026033",
+      "name": "Email General Inbox"
+    },
+    {
+      "parameters": {
+        "isBodyHtml": true,
+        "subject": "={{ $json.EmailSubjectGeneral }}",
+        "body": "={{ $json.EmailBodyGeneral }}",
+        "fromEmail": "noreply@tronic.com.au",
+        "toAddresses": [
+          "={{ $json.GeneralEmail }}"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.awsSes",
+      "typeVersion": 1,
+      "position": [
+        320,
+        -64
+      ],
+      "id": "e21a5fa3-2e18-4a7b-9ff9-9067472051cc",
+      "name": "Send an email",
+      "credentials": {
+        "aws": {
+          "id": "8oLi1zGdnDVLjgaJ",
+          "name": "AWS account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"tool_call_results\": [\n    {\n      \"tool_call_id\": \"{{ $('General Enquiry Vars').item.json.tool_call_ID }}\",\n      \"output\": {\n        \"result\": \"General enquiry has been logged and sent to the Admin Team.\"\n      }\n    }\n  ]\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        528,
+        -64
+      ],
+      "id": "ef8dcc9e-4440-4a15-a245-d56f9e5ebffb",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook-Receive General Enquiry Data": {
+      "main": [
+        [
+          {
+            "node": "General Enquiry Vars",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "General Enquiry Vars": {
+      "main": [
+        [
+          {
+            "node": "Email General Inbox",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email General Inbox": {
+      "main": [
+        [
+          {
+            "node": "Send an email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send an email": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "9bc516de-519c-4932-a171-2fbc4afc5b5f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ff64ff050002116963c45fd099f24dfcd241aea6cbeef21a6321b7b4f9a8432a"
+  },
+  "id": "LBawIT6UbPBTwoeQ",
+  "tags": []
+}

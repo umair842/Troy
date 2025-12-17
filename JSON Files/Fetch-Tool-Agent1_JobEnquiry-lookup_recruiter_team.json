@@ -1,0 +1,487 @@
+{
+  "name": "Fetch-Tool-Agent1_JobEnquiry-lookup_recruiter_team",
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b7a6f05f-819d-4536-aa43-c378cf97c16d",
+              "name": "recruiter_name",
+              "value": "={{ $json.body[0].args.recruiter_name }}",
+              "type": "string"
+            },
+            {
+              "id": "f4d497bb-e236-4335-80a5-11cd12728e59",
+              "name": "caller_state",
+              "value": "={{ $json.body[0].args.caller_state }}",
+              "type": "string"
+            },
+            {
+              "id": "1905069e-0efd-4a7f-b7eb-1503fcbda05f",
+              "name": "tool_call_id",
+              "value": "={{ $json.body[0].call.transcript_with_tool_calls[0].tool_call_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        128,
+        32
+      ],
+      "id": "ffdde55b-351e-42a1-b899-0ba27ff9101f",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0647049f-8234-4c7d-869a-fba697e3f916",
+              "name": "EmailSubjectError",
+              "value": "=Fetch ERROR: Job Enquiry Lookup Recruiter-{{ $json.recruiter_name }}",
+              "type": "string"
+            },
+            {
+              "id": "a87e571b-7a50-4ea9-bce1-c346fb952be0",
+              "name": "EmailBodyError",
+              "value": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\" />\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n<title>Make.com Error — Job Enquiry Routing</title>\n<style>\n  body { margin:0; padding:0; background:#f4f4f4; font-family:Arial,Helvetica,sans-serif; color:#111; }\n  .email-wrap { max-width:640px; margin:24px auto; background:#fff; border:1px solid #e6e6e6; border-radius:8px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,0.06); }\n  .header { background:#fff; border-bottom:1px solid #e6e6e6; padding:16px 20px; text-align:left; }\n  .header img { height:40px; width:auto; }\n  .title { font-size:20px; font-weight:700; margin:0; padding:20px; border-bottom:1px solid #f0f0f0; background:#fafafa; }\n  .section { padding:20px; }\n  .section h3 { margin:0 0 8px; font-size:14px; font-weight:700; color:#555; text-transform:uppercase; }\n  .section p { margin:0 0 16px; font-size:15px; }\n  .error { background:#fff4f4; border-left:4px solid #d21e2b; padding:12px; border-radius:4px; font-weight:700; color:#7e2a2f; margin-bottom:16px; }\n  .highlight { background:#f9f9f9; border-left:4px solid #d21e2b; padding:12px; border-radius:4px; font-style:italic; }\n  .spacer { margin-top:24px; }\n  .footer { background:#fafafa; border-top:1px solid #e6e6e6; text-align:center; padding:16px; font-size:13px; color:#666; }\n  .footer a { color:#d21e2b; text-decoration:none; font-weight:700; }\n</style>\n</head>\n<body>\n  <div class=\"email-wrap\">\n    <div class=\"header\">\n      <img src=\"https://lirp.cdn-website.com/d9af49c1/dms3rep/multi/opt/Fetch-Recruitment-lock-up+640x250px-261w.png\" alt=\"Fetch Recruitment\" />\n    </div>\n\n    <h1 class=\"title\">⚠ Fetch ERROR: Job Enquiry Lookup Recruiter-{{ $json.recruiter_name }}</h1>\n\n    <div class=\"section\">\n      <div class=\"error\">Immediate attention required. An automation step failed.</div>\n\n      <h3>Recruiter Name</h3>\n      <p>{{ $json.recruiter_name }}</p>\n\n      <h3>Caller State</h3>\n      <p>{{ $json.caller_state }}</p>\n\n      <div class=\"spacer\"></div>\n\n      <p>If you need additional fields in this notification later, update the Make.com module to pass them explicitly. This template will only render the two endpoints provided.</p>\n    </div>\n\n    <div class=\"footer\">\n      <a href=\"https://www.fetchrecruitment.com.au/\">fetchrecruitment.com.au</a><br />\n      &copy; 2025 Fetch Recruitment\n    </div>\n  </div>\n</body>\n</html>",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        112,
+        416
+      ],
+      "id": "19bfe0f7-aa92-4150-8fa9-e0197d772c03",
+      "name": "Edit Fields1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "isBodyHtml": true,
+        "subject": "={{ $json.EmailSubjectError }}",
+        "body": "={{ $json.EmailBodyError }}",
+        "fromEmail": "troy@tronic.com.au",
+        "toAddresses": [
+          "troy@tronic.com.au"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.awsSes",
+      "typeVersion": 1,
+      "position": [
+        288,
+        416
+      ],
+      "id": "c84720b1-10e7-4e11-9967-ae502d144ab2",
+      "name": "Send an email",
+      "credentials": {
+        "aws": {
+          "id": "8oLi1zGdnDVLjgaJ",
+          "name": "AWS account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "0e433427-8fb4-468f-82e9-b0f3e294c4f6",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -112,
+        32
+      ],
+      "id": "1ac1beca-9404-4f96-8477-2e41b7bab789",
+      "name": "R_Webhook-Receive Job Enquiry",
+      "webhookId": "0e433427-8fb4-468f-82e9-b0f3e294c4f6"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "wicf6lIFfdJVp7cz",
+          "mode": "list",
+          "cachedResultName": "troy",
+          "cachedResultUrl": "/projects/GbvALranFj1esqfP/datatables/wicf6lIFfdJVp7cz"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "State",
+              "condition": "ilike",
+              "keyValue": "={{ $json.caller_state }}"
+            },
+            {
+              "keyName": "Recruiter_Name",
+              "condition": "ilike",
+              "keyValue": "={{ $json.recruiter_name }}"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        352,
+        32
+      ],
+      "id": "843b776c-7a47-4ee4-8a7e-f7233bf9b44d",
+      "name": "Get row(s)",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "e310b6f4-d7f4-4d20-ab82-4d1e9d699d7b",
+              "leftValue": "={{ $json }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        560,
+        32
+      ],
+      "id": "ccb7f2c6-7574-4083-be46-5f1a944eb3d9",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {
+          "temperature": 0.2
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1104,
+        240
+      ],
+      "id": "bc3df710-86ef-48fa-bb5a-5f6dbc98b2d4",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "nUS0yIkSTmN4aVAy",
+          "name": "Tronic OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=\nYou are a recruiter name matcher.\n\nThe caller said the recruiter's name as: \"{{$items(\"Edit Fields\")[0].json.recruiter_name}}\".\nThe caller is from the state: \"{{$items(\"Edit Fields\")[0].json.caller_state}}\".\n\nHere is the list of known recruiters with their states and teams (one per line, format: Name | State | Team):\n\n{{ $items(\"Get row(s)2 (All Recruiters)1\").map(i => ((i.json.Recruiter_Name || i.json.Name || \"\") + \" | \" + (i.json.State || \"\") + \" | \" + (i.json.Team || \"\"))).join(\"\\n\") }}\n\nYour task:\n- Choose the single best recruiter name that most closely matches what the caller said.\n- Prefer a recruiter in the same or nearby state if the match quality is similar.\n- If no close match exists, respond exactly with: not_found\n\nOutput RULES (very important):\n- Output only ONE line.\n- Either output one exact name as it appears in the list above, or output exactly: not_found\n- No extra words, no explanations, no punctuation.\n",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        1104,
+        48
+      ],
+      "id": "82392bfd-ce19-4114-a268-462e42edde17",
+      "name": "Basic LLM Chain1"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n     \"tool_call_results\": [\n       {\n         \"tool_call_id\": \"{{ $('Edit Fields').item.json.tool_call_id }}\",\n         \"output\": {\n           \"recruiter_group\": \"not_found\"\n         }\n       }\n     ]\n    } ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1792,
+        -224
+      ],
+      "id": "de28c872-cdcb-4f26-8d6d-b6b26b33a344",
+      "name": "Not found"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"tool_call_results\": [\n    {\n      \"tool_call_id\": \"{{ $('Edit Fields').item.json.tool_call_id }}\",\n      \"output\": {\n        \"recruiter_group\": \"{{ $json.text }}\"\n      }\n    }\n  ]\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1824,
+        176
+      ],
+      "id": "b97c8b2a-72e9-4a98-8e41-76836de08172",
+      "name": "Record Found"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"tool_call_results\": [\n    {\n      \"tool_call_id\": \" {{ $('Edit Fields').item.json.tool_call_id }}\",\n      \"output\": {\n        \"recruiter_group\": \"{{ $json.Team }}\"\n      }\n    }\n  ]\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        816,
+        -192
+      ],
+      "id": "3746ece4-68e4-4632-8f6d-68263a7c69a7",
+      "name": "Respond to Webhook (Direct Match)1"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "wicf6lIFfdJVp7cz",
+          "mode": "list",
+          "cachedResultName": "troy",
+          "cachedResultUrl": "/projects/GbvALranFj1esqfP/datatables/wicf6lIFfdJVp7cz"
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        864,
+        48
+      ],
+      "id": "245874cb-6f05-418e-a617-c7b637c8590f",
+      "name": "Get row(s)2 (All Recruiters)1"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.text }}",
+                    "rightValue": "not_found",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "b8c56197-a48b-411a-bb07-f78e2219bc94"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "not found "
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d4d9d17b-cdaf-4f3a-9d48-343f9f23bc3d",
+                    "leftValue": "={{ $json.text }}",
+                    "rightValue": "not_found",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notContains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "record found"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        1488,
+        48
+      ],
+      "id": "ffa7ee60-288e-41e1-a84f-715ff0c6af16",
+      "name": "Switch (AI Result)1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Send an email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "R_Webhook-Receive Job Enquiry": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook (Direct Match)1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get row(s)2 (All Recruiters)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain1": {
+      "main": [
+        [
+          {
+            "node": "Switch (AI Result)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)2 (All Recruiters)1": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch (AI Result)1": {
+      "main": [
+        [
+          {
+            "node": "Not found",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Record Found",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "c780f671-47d3-4f88-a901-f784adb9cd09",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ff64ff050002116963c45fd099f24dfcd241aea6cbeef21a6321b7b4f9a8432a"
+  },
+  "id": "daz2Drw1tZn5TTZZ",
+  "tags": []
+}

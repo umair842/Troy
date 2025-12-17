@@ -1,0 +1,2671 @@
+{
+  "name": "Fetch-Tool-Agent1_JobEnquiry-log_job_enquiry",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "888a233c-11fe-4721-a01e-d4469731edfa",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -624,
+        -160
+      ],
+      "id": "b657d38e-9498-4dd0-8096-3350da52ddb5",
+      "name": "Webhook-Log Job Enquiry",
+      "webhookId": "888a233c-11fe-4721-a01e-d4469731edfa"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "64108a2a-45a9-447f-81c3-09cc53d22050",
+              "name": "caller_name",
+              "value": "={{ $json.body.args.caller_name }}",
+              "type": "string"
+            },
+            {
+              "id": "d491b89b-98da-40c9-962f-47f1abc51ab9",
+              "name": "caller_phone",
+              "value": "={{ $json.body.args.caller_phone }}",
+              "type": "string"
+            },
+            {
+              "id": "c98061b0-ecd6-4d6f-8fa3-2918e4272d33",
+              "name": "caller_email",
+              "value": "={{ $json.body.args.caller_email }}",
+              "type": "string"
+            },
+            {
+              "id": "4c5ccc28-f8a4-450b-832c-ca929088f8f9",
+              "name": "message",
+              "value": "={{ $json.body.args.message }}",
+              "type": "string"
+            },
+            {
+              "id": "8d5ae6c4-fa81-4cbf-8a0b-248c73a44457",
+              "name": "recruiter_group",
+              "value": "={{ $json.body.args.recruiter_group }}",
+              "type": "string"
+            },
+            {
+              "id": "f9978160-9576-4753-9ac4-1019bdb51b18",
+              "name": "Transcription",
+              "value": "={{ $json.body.call.transcript }}",
+              "type": "string"
+            },
+            {
+              "id": "3921848a-d801-46c7-a9ea-41afdce8388c",
+              "name": "Call-ID",
+              "value": "={{ $json.body.call.call_id }}",
+              "type": "string"
+            },
+            {
+              "id": "89291eae-959c-4196-bd52-9480f944b66e",
+              "name": "tool_call_id",
+              "value": "={{ $json.body.call.transcript_with_tool_calls[8].tool_call_id }}",
+              "type": "string"
+            },
+            {
+              "id": "f398c50e-7139-4b0c-a159-8fb48cf69134",
+              "name": "CallTime",
+              "value": "={{ DateTime.local().setZone('Australia/Melbourne').toFormat('yyyy-MM-dd HH:mm') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -416,
+        -160
+      ],
+      "id": "e610c6aa-047c-4a0e-82c3-55dcefdd5b50",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "wicf6lIFfdJVp7cz",
+          "mode": "list",
+          "cachedResultName": "troy",
+          "cachedResultUrl": "/projects/GbvALranFj1esqfP/datatables/wicf6lIFfdJVp7cz"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Team",
+              "condition": "ilike",
+              "keyValue": "={{ $json.recruiter_group }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        32,
+        -320
+      ],
+      "id": "6fccd5b9-78b3-4335-af36-24c08b5f736a",
+      "name": "Get row(s)",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "fd238032-230e-4991-b73a-1864f31094d8",
+              "leftValue": "={{ $json }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -192,
+        -160
+      ],
+      "id": "dbaa379f-5915-4386-b43e-b4d25ac0af01",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f8399ecc-9e6d-473b-87be-62288b0306fe",
+              "name": "EmailSubjectError",
+              "value": "=Fetch ERROR: Job Enquiry Routing - {{ $('Edit Fields').item.json.recruiter_group }}",
+              "type": "string"
+            },
+            {
+              "id": "6c508036-432c-4e1c-9f42-975a6ee33bf9",
+              "name": "ErrorEmailRecipient",
+              "value": "troy@tronic.com.au",
+              "type": "string"
+            },
+            {
+              "id": "7825c7ef-e498-41b0-8ac8-9cf83b31e96b",
+              "name": "EmailBodyError",
+              "value": "=<!DOCTYPE html> <html lang=\"en\"> <head> <meta charset=\"UTF-8\"> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"> <title>Script Error — Job Enquiry Routing</title> <style>   body { margin:0; padding:0; background:#f4f4f4; font-family:Arial,Helvetica,sans-serif; color:#111; }   .email-wrap { max-width:640px; margin:24px auto; background:#fff; border:1px solid #e6e6e6; border-radius:8px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,0.06); }   .header { background:#fff; border-bottom:1px solid #e6e6e6; padding:16px 20px; text-align:left; }   .header img { height:40px; width:auto; }   .title { font-size:20px; font-weight:700; margin:0; padding:20px; border-bottom:1px solid #f0f0f0; background:#fafafa; }   .section { padding:20px; }   .section h3 { margin:0 0 8px; font-size:14px; font-weight:700; color:#555; text-transform:uppercase; }   .section p { margin:0 0 16px; font-size:15px; }   .error { background:#fff4f4; border-left:4px solid #d21e2b; padding:12px; border-radius:4px; font-weight:700; color:#7e2a2f; margin-bottom:16px; }   .highlight { background:#f9f9f9; border-left:4px solid #d21e2b; padding:12px; border-radius:4px; font-style:italic; }   .spacer { margin-top:24px; }   .footer { background:#fafafa; border-top:1px solid #e6e6e6; text-align:center; padding:16px; font-size:13px; color:#666; }   .footer a { color:#d21e2b; text-decoration:none; font-weight:700; }   .transcript-block { background:#f9f9f9; border-left:4px solid #d21e2b; padding:12px; border-radius:4px; font-style:italic; }   .transcript-block pre { margin:0; white-space:pre-wrap; font-family:Arial,Helvetica,sans-serif; font-size:15px; } </style> </head> <body>   <div class=\"email-wrap\">     <div class=\"header\">       <img src=\"https://lirp.cdn-website.com/d9af49c1/dms3rep/multi/opt/Fetch-Recruitment-lock-up+640x250px-261w.png\" alt=\"Fetch Recruitment\">     </div>     <h1 class=\"title\">⚠ Script ERROR: Job Enquiry Routing</h1>     <div class=\"section\">       <div class=\"error\">Immediate attention required. An automation step failed.</div>        <h3>Call Start Time</h3>       <p>{{ $('Edit Fields').first().json.CallTime }}</p>        <h3>Call ID</h3>       <p>{{ $('Edit Fields').item.json['Call-ID'] }}</p>        <h3>Caller Name</h3>       <p>{{ $('Edit Fields').item.json.caller_name }}</p>        <h3>Caller Phone</h3>       <p>{{ $('Edit Fields').item.json.caller_phone }}</p>        <h3>Caller Email</h3>       <p>{{ $('Edit Fields').item.json.caller_email }}</p>        <h3>Recruiter Group</h3>       <p>{{ $('Edit Fields').item.json.recruiter_group }}</p>        <h3>Message</h3>       <div class=\"highlight\">{{ $('Edit Fields').item.json.message }}</div>        <div class=\"spacer\"></div>       <h3>Transcript</h3>       <div class=\"transcript-block\">         <pre>{{ $('Edit Fields').item.json.Transcription }}</pre>       </div>     </div>     <div class=\"footer\">       <a href=\"https://www.fetchrecruitment.com.au/\">fetchrecruitment.com.au</a><br>       &copy; 2025 Fetch Recruitment     </div>   </div> </body> </html>",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        64,
+        16
+      ],
+      "id": "8e03d7ec-f83e-44f5-80cb-b27b11e4b513",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "isBodyHtml": true,
+        "subject": "={{ $json.EmailSubjectError }}",
+        "body": "={{ $json.EmailBodyError }}",
+        "fromEmail": "troy@tronic.com.au",
+        "toAddresses": [
+          "{{ $json.ErrorEmailRecipient  }}"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.awsSes",
+      "typeVersion": 1,
+      "position": [
+        240,
+        16
+      ],
+      "id": "63f7bb3b-9d0e-400d-ade7-0a4e2db26fca",
+      "name": "Send an email",
+      "credentials": {
+        "aws": {
+          "id": "8oLi1zGdnDVLjgaJ",
+          "name": "AWS account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "abdec1ed-c9b2-4291-b1e4-6c7a4bcda841",
+              "leftValue": "={{$json}}",
+              "rightValue": "0",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        240,
+        -320
+      ],
+      "id": "fd5f59a0-e291-4e4f-a862-f146b31e5f3a",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "subject": "=New Job Enquiry: {{ $('Edit Fields').item.json.caller_email }}",
+        "body": "=\ncaller name :{{ $('Edit Fields').item.json.caller_name }}\ncaller phone :{{ $('Edit Fields').item.json.caller_phone }}\nmessage :{{ $('Edit Fields').item.json.message }}\nrecruiter group :{{ $('Edit Fields').item.json.recruiter_group }}\nTranscription :{{ $('Edit Fields').item.json.Transcription }}\ncall time :{{ $('Edit Fields').item.json.CallTime }}",
+        "fromEmail": "troy@tronic.com.au",
+        "toAddresses": [
+          "={{ $json.Staff_Email }}"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.awsSes",
+      "typeVersion": 1,
+      "position": [
+        512,
+        -480
+      ],
+      "id": "93f92608-8a29-4834-9ce4-35b869aaf59a",
+      "name": "Send an email1",
+      "credentials": {
+        "aws": {
+          "id": "8oLi1zGdnDVLjgaJ",
+          "name": "AWS account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "subject": "FALLBACK: New Job Enquiry",
+        "body": "= caller name :{{ $('Edit Fields').item.json.caller_name }} caller phone :{{ $('Edit Fields').item.json.caller_phone }} message :{{ $('Edit Fields').item.json.message }} recruiter group :{{ $('Edit Fields').item.json.recruiter_group }} Transcription :{{ $('Edit Fields').item.json.Transcription }} call time :{{ $('Edit Fields').item.json.CallTime }}",
+        "fromEmail": "troy@tronic.com.au",
+        "toAddresses": [
+          "={{ $('Edit Fields').item.json.caller_email }}"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.awsSes",
+      "typeVersion": 1,
+      "position": [
+        512,
+        -224
+      ],
+      "id": "8f2458bf-8f77-4b3b-aa0d-dc35474b920e",
+      "name": "Send an email2",
+      "credentials": {
+        "aws": {
+          "id": "8oLi1zGdnDVLjgaJ",
+          "name": "AWS account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n \"tool_call_results\": [\n   {\n     \"tool_call_id\": \"{{ $('Edit Fields').item.json.tool_call_id }}\",\n     \"output\": {\n       \"result\": \"Job enquiry has been logged with the recruiter team.\"\n     }\n   }\n ]\n} ",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        752,
+        -480
+      ],
+      "id": "4d2f0dbc-6ebd-4c45-bdf0-bb0b92567138",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n \"tool_call_results\": [\n   {\n     \"tool_call_id\": \"{{ $('Edit Fields').item.json.tool_call_id }}\",\n     \"output\": {\n       \"result\": \"Job enquiry has been logged with relevant team.\"\n     }\n   }\n ]\n}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        720,
+        -224
+      ],
+      "id": "eff8a761-05d6-4e76-b7ce-a6f06d56b866",
+      "name": "Respond to Webhook1"
+    }
+  ],
+  "pinData": {
+    "Webhook-Log Job Enquiry": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.tronic.com.au",
+            "user-agent": "Retell-AI-Webhook/1.0",
+            "content-length": "22920",
+            "accept": "application/json,text/html,application/xhtml+xml,application/xml,text/*;q=0.9, image/*;q=0.8, */*;q=0.7",
+            "accept-encoding": "gzip, compress, deflate, br",
+            "content-type": "application/json",
+            "via": "1.1 Caddy",
+            "x-forwarded-for": "44.223.152.56",
+            "x-forwarded-host": "n8n.tronic.com.au",
+            "x-forwarded-proto": "https"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "call": {
+              "call_id": "playground",
+              "call_type": "web_call",
+              "agent_id": "agent_0ec518de372c0040d043449a46",
+              "agent_version": 122,
+              "agent_name": "Main Incoming Calls- Voice AI Agent",
+              "retell_llm_dynamic_variables": {
+                "call_id": "playground",
+                "session_type": "voice",
+                "call_type": "web_call",
+                "job_category": "carpentry",
+                "job_title": "carpentry job",
+                "current_agent_state": "Job_Application_Enquiry_Agent",
+                "previous_agent_state": "INTRO_MANAGER_Agent"
+              },
+              "call_status": "ongoing",
+              "transcript": "Agent: Hello, this is Hannah from Fetch Recruitment. This call is recorded for quality and training purposes. How can I help you today?\nUser: i want to apply for a carpentry job\nAgent: I can help with your job enquiry. First, what state is the job in?\nUser: melbourne\nAgent: To get you to the right person quickly, is there a recruiter's name listed on the job ad you're calling about?\nUser: Lachlie\nAgent: Great, I've found them. They are in our Corporate Services team. Perfect. Now I just need to get a few details to log this enquiry for the team. What’s your full name?\nUser: peter tron\nAgent: And your best email address?\nUser: peter@email.com\nAgent: Your phone number?\nUser: 0412123123\nAgent: And finally, could you confirm the job title or give me a brief message to pass on?\nUser: ring me\nAgent: Let me read that back to make sure I’ve got it right. Your name is Peter Tron, your email is peter@email.com, your phone number is 0412123123, and you're enquiring about \"ring me\" for our Corporate Services team—does that all sound correct, and is it okay for me to log this for the team?\nUser: yes\n",
+              "transcript_object": [
+                {
+                  "messageId": "message_0bef9a6932a05651ae8182a6",
+                  "chatId": "playground",
+                  "role": "agent",
+                  "content": "Hello, this is Hannah from Fetch Recruitment. This call is recorded for quality and training purposes. How can I help you today?",
+                  "createdTimestamp": 1758672135704,
+                  "words": [
+                    {
+                      "word": "Hello, ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "this ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "is ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "Hannah ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "from ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "Fetch ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "Recruitment. ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "This ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "call ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "is ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "recorded ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "for ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "quality ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "and ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "training ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "purposes. ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "How ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "can ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "I ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "help ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "you ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "today?",
+                      "start": 0,
+                      "end": 0
+                    }
+                  ]
+                },
+                {
+                  "messageId": "message_e3fdeb083e4d68df12baff56",
+                  "chatId": "playground",
+                  "role": "user",
+                  "content": "i want to apply for a carpentry job",
+                  "createdTimestamp": 1758672135705,
+                  "words": [
+                    {
+                      "word": "i ",
+                      "start": 1,
+                      "end": 1
+                    },
+                    {
+                      "word": "want ",
+                      "start": 1,
+                      "end": 1
+                    },
+                    {
+                      "word": "to ",
+                      "start": 1,
+                      "end": 1
+                    },
+                    {
+                      "word": "apply ",
+                      "start": 1,
+                      "end": 1
+                    },
+                    {
+                      "word": "for ",
+                      "start": 1,
+                      "end": 1
+                    },
+                    {
+                      "word": "a ",
+                      "start": 1,
+                      "end": 1
+                    },
+                    {
+                      "word": "carpentry ",
+                      "start": 1,
+                      "end": 1
+                    },
+                    {
+                      "word": "job",
+                      "start": 1,
+                      "end": 1
+                    }
+                  ]
+                },
+                {
+                  "messageId": "message_24c657ffb14a221be66e5e20",
+                  "chatId": "playground",
+                  "role": "agent",
+                  "content": "I can help with your job enquiry. First, what state is the job in?",
+                  "createdTimestamp": 1758672135708,
+                  "words": [
+                    {
+                      "word": "I ",
+                      "start": 4,
+                      "end": 4
+                    },
+                    {
+                      "word": "can ",
+                      "start": 4,
+                      "end": 4
+                    },
+                    {
+                      "word": "help ",
+                      "start": 4,
+                      "end": 4
+                    },
+                    {
+                      "word": "with ",
+                      "start": 4,
+                      "end": 4
+                    },
+                    {
+                      "word": "your ",
+                      "start": 4,
+                      "end": 4
+                    },
+                    {
+                      "word": "job ",
+                      "start": 4,
+                      "end": 4
+                    },
+                    {
+                      "word": "enquiry. ",
+                      "start": 4,
+                      "end": 4
+                    },
+                    {
+                      "word": "First, ",
+                      "start": 4,
+                      "end": 4
+                    },
+                    {
+                      "word": "what ",
+                      "start": 4,
+                      "end": 4
+                    },
+                    {
+                      "word": "state ",
+                      "start": 4,
+                      "end": 4
+                    },
+                    {
+                      "word": "is ",
+                      "start": 4,
+                      "end": 4
+                    },
+                    {
+                      "word": "the ",
+                      "start": 4,
+                      "end": 4
+                    },
+                    {
+                      "word": "job ",
+                      "start": 4,
+                      "end": 4
+                    },
+                    {
+                      "word": "in?",
+                      "start": 4,
+                      "end": 4
+                    }
+                  ]
+                },
+                {
+                  "messageId": "message_502ccfab2ec5e6bb05a9e72c",
+                  "chatId": "playground",
+                  "role": "user",
+                  "content": "melbourne",
+                  "createdTimestamp": 1758672135709,
+                  "words": [
+                    {
+                      "word": "melbourne",
+                      "start": 5,
+                      "end": 5
+                    }
+                  ]
+                },
+                {
+                  "messageId": "message_4b4d4b5cf2d787366fc5ba14",
+                  "chatId": "playground",
+                  "role": "agent",
+                  "content": "To get you to the right person quickly, is there a recruiter's name listed on the job ad you're calling about?",
+                  "createdTimestamp": 1758672135710,
+                  "words": [
+                    {
+                      "word": "To ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "get ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "you ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "to ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "the ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "right ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "person ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "quickly, ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "is ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "there ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "a ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "recruiter's ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "name ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "listed ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "on ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "the ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "job ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "ad ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "you're ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "calling ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "about?",
+                      "start": 6,
+                      "end": 6
+                    }
+                  ]
+                },
+                {
+                  "messageId": "message_746a880aa908fc49f8a48dec",
+                  "chatId": "playground",
+                  "role": "user",
+                  "content": "Lachlie",
+                  "createdTimestamp": 1758672135711,
+                  "words": [
+                    {
+                      "word": "Lachlie",
+                      "start": 7,
+                      "end": 7
+                    }
+                  ]
+                },
+                {
+                  "messageId": "message_c099f632a729a8dcc2b5afff",
+                  "chatId": "playground",
+                  "role": "agent",
+                  "content": "Great, I've found them. They are in our Corporate Services team. Perfect. Now I just need to get a few details to log this enquiry for the team. What’s your full name?",
+                  "createdTimestamp": 1758672135714,
+                  "words": [
+                    {
+                      "word": "Great, ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "I've ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "found ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "them. ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "They ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "are ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "in ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "our ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "Corporate ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "Services ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "team. ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "Perfect. ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "Now ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "I ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "just ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "need ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "to ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "get ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "a ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "few ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "details ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "to ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "log ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "this ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "enquiry ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "for ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "the ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "team. ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "What’s ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "your ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "full ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "name?",
+                      "start": 10,
+                      "end": 10
+                    }
+                  ]
+                },
+                {
+                  "messageId": "message_9dc0e276e4dd65ee5ce1a447",
+                  "chatId": "playground",
+                  "role": "user",
+                  "content": "peter tron",
+                  "createdTimestamp": 1758672135715,
+                  "words": [
+                    {
+                      "word": "peter ",
+                      "start": 11,
+                      "end": 11
+                    },
+                    {
+                      "word": "tron",
+                      "start": 11,
+                      "end": 11
+                    }
+                  ]
+                },
+                {
+                  "messageId": "message_947a5d1d879db8595f2e650a",
+                  "chatId": "playground",
+                  "role": "agent",
+                  "content": "And your best email address?",
+                  "createdTimestamp": 1758672135716,
+                  "words": [
+                    {
+                      "word": "And ",
+                      "start": 12,
+                      "end": 12
+                    },
+                    {
+                      "word": "your ",
+                      "start": 12,
+                      "end": 12
+                    },
+                    {
+                      "word": "best ",
+                      "start": 12,
+                      "end": 12
+                    },
+                    {
+                      "word": "email ",
+                      "start": 12,
+                      "end": 12
+                    },
+                    {
+                      "word": "address?",
+                      "start": 12,
+                      "end": 12
+                    }
+                  ]
+                },
+                {
+                  "messageId": "message_c1ab63bef63c3c957d0614bb",
+                  "chatId": "playground",
+                  "role": "user",
+                  "content": "peter@email.com",
+                  "createdTimestamp": 1758672135717,
+                  "words": [
+                    {
+                      "word": "peter@email.com",
+                      "start": 13,
+                      "end": 13
+                    }
+                  ]
+                },
+                {
+                  "messageId": "message_f464285ce54a25c834d1fcc3",
+                  "chatId": "playground",
+                  "role": "agent",
+                  "content": "Your phone number?",
+                  "createdTimestamp": 1758672135718,
+                  "words": [
+                    {
+                      "word": "Your ",
+                      "start": 14,
+                      "end": 14
+                    },
+                    {
+                      "word": "phone ",
+                      "start": 14,
+                      "end": 14
+                    },
+                    {
+                      "word": "number?",
+                      "start": 14,
+                      "end": 14
+                    }
+                  ]
+                },
+                {
+                  "messageId": "message_1419a36a5d34074a3cd30411",
+                  "chatId": "playground",
+                  "role": "user",
+                  "content": "0412123123",
+                  "createdTimestamp": 1758672135719,
+                  "words": [
+                    {
+                      "word": "0412123123",
+                      "start": 15,
+                      "end": 15
+                    }
+                  ]
+                },
+                {
+                  "messageId": "message_5633fc035ba419558c7209f8",
+                  "chatId": "playground",
+                  "role": "agent",
+                  "content": "And finally, could you confirm the job title or give me a brief message to pass on?",
+                  "createdTimestamp": 1758672135720,
+                  "words": [
+                    {
+                      "word": "And ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "finally, ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "could ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "you ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "confirm ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "the ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "job ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "title ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "or ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "give ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "me ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "a ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "brief ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "message ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "to ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "pass ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "on?",
+                      "start": 16,
+                      "end": 16
+                    }
+                  ]
+                },
+                {
+                  "messageId": "message_dba82c0940a920e124284bdd",
+                  "chatId": "playground",
+                  "role": "user",
+                  "content": "ring me",
+                  "createdTimestamp": 1758672135721,
+                  "words": [
+                    {
+                      "word": "ring ",
+                      "start": 17,
+                      "end": 17
+                    },
+                    {
+                      "word": "me",
+                      "start": 17,
+                      "end": 17
+                    }
+                  ]
+                },
+                {
+                  "messageId": "message_6b9d5eb6c5bf8b9dbe8c50a5",
+                  "chatId": "playground",
+                  "role": "agent",
+                  "content": "Let me read that back to make sure I’ve got it right. Your name is Peter Tron, your email is peter@email.com, your phone number is 0412123123, and you're enquiring about \"ring me\" for our Corporate Services team—does that all sound correct, and is it okay for me to log this for the team?",
+                  "createdTimestamp": 1758672135722,
+                  "words": [
+                    {
+                      "word": "Let ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "me ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "read ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "that ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "back ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "to ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "make ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "sure ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "I’ve ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "got ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "it ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "right. ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "Your ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "name ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "is ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "Peter ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "Tron, ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "your ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "email ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "is ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "peter@email.com, ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "your ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "phone ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "number ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "is ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "0412123123, ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "and ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "you're ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "enquiring ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "about ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "\"ring ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "me\" ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "for ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "our ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "Corporate ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "Services ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "team—does ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "that ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "all ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "sound ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "correct, ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "and ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "is ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "it ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "okay ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "for ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "me ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "to ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "log ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "this ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "for ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "the ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "team?",
+                      "start": 18,
+                      "end": 18
+                    }
+                  ]
+                },
+                {
+                  "messageId": "message_8e55125ae2d202c5009d6c87",
+                  "chatId": "playground",
+                  "role": "user",
+                  "content": "yes",
+                  "createdTimestamp": 1758672135723,
+                  "words": [
+                    {
+                      "word": "yes",
+                      "start": 19,
+                      "end": 19
+                    }
+                  ]
+                }
+              ],
+              "transcript_with_tool_calls": [
+                {
+                  "messageId": "message_0bef9a6932a05651ae8182a6",
+                  "chatId": "playground",
+                  "role": "agent",
+                  "content": "Hello, this is Hannah from Fetch Recruitment. This call is recorded for quality and training purposes. How can I help you today?",
+                  "createdTimestamp": 1758672135704,
+                  "words": [
+                    {
+                      "word": "Hello, ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "this ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "is ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "Hannah ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "from ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "Fetch ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "Recruitment. ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "This ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "call ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "is ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "recorded ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "for ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "quality ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "and ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "training ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "purposes. ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "How ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "can ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "I ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "help ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "you ",
+                      "start": 0,
+                      "end": 0
+                    },
+                    {
+                      "word": "today?",
+                      "start": 0,
+                      "end": 0
+                    }
+                  ]
+                },
+                {
+                  "messageId": "message_e3fdeb083e4d68df12baff56",
+                  "chatId": "playground",
+                  "role": "user",
+                  "content": "i want to apply for a carpentry job",
+                  "createdTimestamp": 1758672135705,
+                  "words": [
+                    {
+                      "word": "i ",
+                      "start": 1,
+                      "end": 1
+                    },
+                    {
+                      "word": "want ",
+                      "start": 1,
+                      "end": 1
+                    },
+                    {
+                      "word": "to ",
+                      "start": 1,
+                      "end": 1
+                    },
+                    {
+                      "word": "apply ",
+                      "start": 1,
+                      "end": 1
+                    },
+                    {
+                      "word": "for ",
+                      "start": 1,
+                      "end": 1
+                    },
+                    {
+                      "word": "a ",
+                      "start": 1,
+                      "end": 1
+                    },
+                    {
+                      "word": "carpentry ",
+                      "start": 1,
+                      "end": 1
+                    },
+                    {
+                      "word": "job",
+                      "start": 1,
+                      "end": 1
+                    }
+                  ]
+                },
+                {
+                  "role": "tool_call_invocation",
+                  "tool_call_id": "d5a02b71a72eb24e",
+                  "name": "transition_to_Job_Application_Enquiry_Agent",
+                  "arguments": "{\"job_category\":\"carpentry\",\"job_title\":\"carpentry job\"}"
+                },
+                {
+                  "messageId": "message_24c657ffb14a221be66e5e20",
+                  "chatId": "playground",
+                  "role": "agent",
+                  "content": "I can help with your job enquiry. First, what state is the job in?",
+                  "createdTimestamp": 1758672135708,
+                  "words": [
+                    {
+                      "word": "I ",
+                      "start": 4,
+                      "end": 4
+                    },
+                    {
+                      "word": "can ",
+                      "start": 4,
+                      "end": 4
+                    },
+                    {
+                      "word": "help ",
+                      "start": 4,
+                      "end": 4
+                    },
+                    {
+                      "word": "with ",
+                      "start": 4,
+                      "end": 4
+                    },
+                    {
+                      "word": "your ",
+                      "start": 4,
+                      "end": 4
+                    },
+                    {
+                      "word": "job ",
+                      "start": 4,
+                      "end": 4
+                    },
+                    {
+                      "word": "enquiry. ",
+                      "start": 4,
+                      "end": 4
+                    },
+                    {
+                      "word": "First, ",
+                      "start": 4,
+                      "end": 4
+                    },
+                    {
+                      "word": "what ",
+                      "start": 4,
+                      "end": 4
+                    },
+                    {
+                      "word": "state ",
+                      "start": 4,
+                      "end": 4
+                    },
+                    {
+                      "word": "is ",
+                      "start": 4,
+                      "end": 4
+                    },
+                    {
+                      "word": "the ",
+                      "start": 4,
+                      "end": 4
+                    },
+                    {
+                      "word": "job ",
+                      "start": 4,
+                      "end": 4
+                    },
+                    {
+                      "word": "in?",
+                      "start": 4,
+                      "end": 4
+                    }
+                  ]
+                },
+                {
+                  "messageId": "message_502ccfab2ec5e6bb05a9e72c",
+                  "chatId": "playground",
+                  "role": "user",
+                  "content": "melbourne",
+                  "createdTimestamp": 1758672135709,
+                  "words": [
+                    {
+                      "word": "melbourne",
+                      "start": 5,
+                      "end": 5
+                    }
+                  ]
+                },
+                {
+                  "messageId": "message_4b4d4b5cf2d787366fc5ba14",
+                  "chatId": "playground",
+                  "role": "agent",
+                  "content": "To get you to the right person quickly, is there a recruiter's name listed on the job ad you're calling about?",
+                  "createdTimestamp": 1758672135710,
+                  "words": [
+                    {
+                      "word": "To ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "get ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "you ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "to ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "the ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "right ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "person ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "quickly, ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "is ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "there ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "a ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "recruiter's ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "name ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "listed ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "on ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "the ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "job ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "ad ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "you're ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "calling ",
+                      "start": 6,
+                      "end": 6
+                    },
+                    {
+                      "word": "about?",
+                      "start": 6,
+                      "end": 6
+                    }
+                  ]
+                },
+                {
+                  "messageId": "message_746a880aa908fc49f8a48dec",
+                  "chatId": "playground",
+                  "role": "user",
+                  "content": "Lachlie",
+                  "createdTimestamp": 1758672135711,
+                  "words": [
+                    {
+                      "word": "Lachlie",
+                      "start": 7,
+                      "end": 7
+                    }
+                  ]
+                },
+                {
+                  "role": "tool_call_invocation",
+                  "tool_call_id": "8695b78e4a243ced",
+                  "name": "lookup_recruiter_team",
+                  "arguments": "{\"caller_state\":\"Melbourne\",\"recruiter_name\":\"Lachlie\"}"
+                },
+                {
+                  "role": "tool_call_result",
+                  "tool_call_id": "8695b78e4a243ced",
+                  "content": "{\"tool_call_results\":[{\"tool_call_id\":\"\",\"output\":{\"recruiter_group\":\"Corporate Services\"}}]}"
+                },
+                {
+                  "messageId": "message_c099f632a729a8dcc2b5afff",
+                  "chatId": "playground",
+                  "role": "agent",
+                  "content": "Great, I've found them. They are in our Corporate Services team. Perfect. Now I just need to get a few details to log this enquiry for the team. What’s your full name?",
+                  "createdTimestamp": 1758672135714,
+                  "words": [
+                    {
+                      "word": "Great, ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "I've ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "found ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "them. ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "They ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "are ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "in ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "our ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "Corporate ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "Services ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "team. ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "Perfect. ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "Now ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "I ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "just ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "need ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "to ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "get ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "a ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "few ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "details ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "to ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "log ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "this ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "enquiry ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "for ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "the ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "team. ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "What’s ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "your ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "full ",
+                      "start": 10,
+                      "end": 10
+                    },
+                    {
+                      "word": "name?",
+                      "start": 10,
+                      "end": 10
+                    }
+                  ]
+                },
+                {
+                  "messageId": "message_9dc0e276e4dd65ee5ce1a447",
+                  "chatId": "playground",
+                  "role": "user",
+                  "content": "peter tron",
+                  "createdTimestamp": 1758672135715,
+                  "words": [
+                    {
+                      "word": "peter ",
+                      "start": 11,
+                      "end": 11
+                    },
+                    {
+                      "word": "tron",
+                      "start": 11,
+                      "end": 11
+                    }
+                  ]
+                },
+                {
+                  "messageId": "message_947a5d1d879db8595f2e650a",
+                  "chatId": "playground",
+                  "role": "agent",
+                  "content": "And your best email address?",
+                  "createdTimestamp": 1758672135716,
+                  "words": [
+                    {
+                      "word": "And ",
+                      "start": 12,
+                      "end": 12
+                    },
+                    {
+                      "word": "your ",
+                      "start": 12,
+                      "end": 12
+                    },
+                    {
+                      "word": "best ",
+                      "start": 12,
+                      "end": 12
+                    },
+                    {
+                      "word": "email ",
+                      "start": 12,
+                      "end": 12
+                    },
+                    {
+                      "word": "address?",
+                      "start": 12,
+                      "end": 12
+                    }
+                  ]
+                },
+                {
+                  "messageId": "message_c1ab63bef63c3c957d0614bb",
+                  "chatId": "playground",
+                  "role": "user",
+                  "content": "peter@email.com",
+                  "createdTimestamp": 1758672135717,
+                  "words": [
+                    {
+                      "word": "peter@email.com",
+                      "start": 13,
+                      "end": 13
+                    }
+                  ]
+                },
+                {
+                  "messageId": "message_f464285ce54a25c834d1fcc3",
+                  "chatId": "playground",
+                  "role": "agent",
+                  "content": "Your phone number?",
+                  "createdTimestamp": 1758672135718,
+                  "words": [
+                    {
+                      "word": "Your ",
+                      "start": 14,
+                      "end": 14
+                    },
+                    {
+                      "word": "phone ",
+                      "start": 14,
+                      "end": 14
+                    },
+                    {
+                      "word": "number?",
+                      "start": 14,
+                      "end": 14
+                    }
+                  ]
+                },
+                {
+                  "messageId": "message_1419a36a5d34074a3cd30411",
+                  "chatId": "playground",
+                  "role": "user",
+                  "content": "0412123123",
+                  "createdTimestamp": 1758672135719,
+                  "words": [
+                    {
+                      "word": "0412123123",
+                      "start": 15,
+                      "end": 15
+                    }
+                  ]
+                },
+                {
+                  "messageId": "message_5633fc035ba419558c7209f8",
+                  "chatId": "playground",
+                  "role": "agent",
+                  "content": "And finally, could you confirm the job title or give me a brief message to pass on?",
+                  "createdTimestamp": 1758672135720,
+                  "words": [
+                    {
+                      "word": "And ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "finally, ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "could ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "you ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "confirm ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "the ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "job ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "title ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "or ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "give ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "me ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "a ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "brief ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "message ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "to ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "pass ",
+                      "start": 16,
+                      "end": 16
+                    },
+                    {
+                      "word": "on?",
+                      "start": 16,
+                      "end": 16
+                    }
+                  ]
+                },
+                {
+                  "messageId": "message_dba82c0940a920e124284bdd",
+                  "chatId": "playground",
+                  "role": "user",
+                  "content": "ring me",
+                  "createdTimestamp": 1758672135721,
+                  "words": [
+                    {
+                      "word": "ring ",
+                      "start": 17,
+                      "end": 17
+                    },
+                    {
+                      "word": "me",
+                      "start": 17,
+                      "end": 17
+                    }
+                  ]
+                },
+                {
+                  "messageId": "message_6b9d5eb6c5bf8b9dbe8c50a5",
+                  "chatId": "playground",
+                  "role": "agent",
+                  "content": "Let me read that back to make sure I’ve got it right. Your name is Peter Tron, your email is peter@email.com, your phone number is 0412123123, and you're enquiring about \"ring me\" for our Corporate Services team—does that all sound correct, and is it okay for me to log this for the team?",
+                  "createdTimestamp": 1758672135722,
+                  "words": [
+                    {
+                      "word": "Let ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "me ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "read ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "that ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "back ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "to ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "make ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "sure ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "I’ve ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "got ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "it ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "right. ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "Your ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "name ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "is ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "Peter ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "Tron, ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "your ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "email ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "is ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "peter@email.com, ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "your ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "phone ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "number ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "is ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "0412123123, ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "and ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "you're ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "enquiring ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "about ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "\"ring ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "me\" ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "for ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "our ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "Corporate ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "Services ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "team—does ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "that ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "all ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "sound ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "correct, ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "and ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "is ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "it ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "okay ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "for ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "me ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "to ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "log ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "this ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "for ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "the ",
+                      "start": 18,
+                      "end": 18
+                    },
+                    {
+                      "word": "team?",
+                      "start": 18,
+                      "end": 18
+                    }
+                  ]
+                },
+                {
+                  "messageId": "message_8e55125ae2d202c5009d6c87",
+                  "chatId": "playground",
+                  "role": "user",
+                  "content": "yes",
+                  "createdTimestamp": 1758672135723,
+                  "words": [
+                    {
+                      "word": "yes",
+                      "start": 19,
+                      "end": 19
+                    }
+                  ]
+                },
+                {
+                  "role": "tool_call_invocation",
+                  "tool_call_id": "c925ae14efddedac",
+                  "name": "log_job_enquiry",
+                  "arguments": "{\"caller_email\":\"peter@email.com\",\"message\":\"ring me\",\"caller_phone\":\"0412123123\",\"caller_name\":\"Peter Tron\",\"recruiter_group\":\"Corporate Services\"}"
+                }
+              ],
+              "latency": {},
+              "call_cost": {
+                "product_costs": [],
+                "combined_cost": 0,
+                "total_duration_seconds": 0,
+                "total_duration_unit_price": 0
+              },
+              "opt_out_sensitive_data_storage": false,
+              "data_storage_setting": "everything",
+              "opt_in_signed_url": false,
+              "tool_mocks": [],
+              "access_token": null
+            },
+            "name": "log_job_enquiry",
+            "args": {
+              "caller_email": "peter@email.com",
+              "message": "ring me",
+              "caller_phone": "0412123123",
+              "caller_name": "Peter Tron",
+              "recruiter_group": "Corporate Services"
+            }
+          },
+          "webhookUrl": "https://n8n.tronic.com.au/webhook-test/888a233c-11fe-4721-a01e-d4469731edfa",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook-Log Job Enquiry": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Send an email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Send an email1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send an email2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send an email1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send an email2": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "590fe2c0-0600-42aa-afcc-880efb7a4ebe",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ff64ff050002116963c45fd099f24dfcd241aea6cbeef21a6321b7b4f9a8432a"
+  },
+  "id": "M2zXsXEkdv19vOAw",
+  "tags": []
+}
